@@ -32,5 +32,15 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("chat.App")
+    mainClass.set("io.github.henriquemcc.chat.java.ClientMain")
+}
+
+tasks.register<JavaExec>("runServer") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("io.github.henriquemcc.chat.java.ServerMain")
+}
+
+tasks.register<JavaExec>("runClient") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("io.github.henriquemcc.chat.java.ClientMain")
 }
