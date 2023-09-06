@@ -37,10 +37,15 @@ application {
 
 tasks.register<JavaExec>("runServer") {
     classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("io.github.henriquemcc.chat.java.ServerMain")
+    mainClass.set("servidor.controlador.Servidor")
 }
 
-tasks.register<JavaExec>("runClient") {
+tasks.register<JavaExec>("runClient1") {
     classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("io.github.henriquemcc.chat.java.ClientMain")
+    mainClass.set("cliente.controlador.Cliente")
+}
+
+tasks.register<JavaExec>("runClient2") {
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("cliente.controlador.Cliente")
 }
