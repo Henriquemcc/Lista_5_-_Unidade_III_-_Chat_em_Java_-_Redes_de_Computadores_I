@@ -13,6 +13,7 @@ public class TratadorCliente extends Thread {
     private final Socket conexaoCliente;
 
     public TratadorCliente(Socket conexaoCliente) {
+        System.out.println("Conectado com: " + conexaoCliente.getInetAddress() + ":" + conexaoCliente.getPort());
         this.conexaoCliente = conexaoCliente;
     }
 
