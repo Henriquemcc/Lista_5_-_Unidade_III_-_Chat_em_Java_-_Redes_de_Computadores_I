@@ -51,7 +51,7 @@ public class Cliente {
     /**
      * Thread responsável por receber mensagem
      */
-    private static ControladorMensagens controladorMensagens = null;
+    public static ControladorMensagens controladorMensagens = null;
 
     public static void configuracaoInicial() {
         Utilitarios.imprimirCabecalho("Menu de configuração inicial");

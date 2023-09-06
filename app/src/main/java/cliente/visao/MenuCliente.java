@@ -2,6 +2,7 @@ package cliente.visao;
 
 import cliente.controlador.Cliente;
 import comum.modelo.IntRange;
+import comum.modelo.Mensagem;
 import comum.modelo.ProtocoloTransporte;
 import comum.visao.*;
 import comum.visao.menu.Botao;
@@ -9,6 +10,7 @@ import comum.visao.menu.Menu;
 import comum.visao.menu.Opcao;
 import comum.visao.menu.Utilitarios;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class MenuCliente {
@@ -74,8 +76,7 @@ public class MenuCliente {
         String mensagem = MyIO.readString("Digite a mensagem a ser enviada:\n");
         boolean confirmacao = Utilitarios.obterConfirmacao("Deseja enviar a mensagem: \"" + mensagem + "\" para \"" + Cliente.destinatario + "\"?");
         if (confirmacao)
-            System.out.println("Ainda não foi implementado");
-        //TODO()
+            Cliente.controladorMensagens.enviarMensagem(new Mensagem(mensagem, Cliente.nomeUsuario, LocalDateTime.now(), Cliente.destinatario));
     }
 
 

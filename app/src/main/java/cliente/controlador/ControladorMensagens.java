@@ -30,6 +30,9 @@ public class ControladorMensagens {
                 enviarComando(Comando.Receber);
                 enviarNomeUsuario(nomeUsuario);
                 List<Mensagem> mensagensRecebidas = receberMensagens();
+                if (mensagensRecebidas.size() > 0) {
+                    System.out.println("Mensagem recebida");
+                }
                 for (Mensagem mensagemRecebida : mensagensRecebidas)
                     listaRecebimento.add(mensagemRecebida);
                 try {
