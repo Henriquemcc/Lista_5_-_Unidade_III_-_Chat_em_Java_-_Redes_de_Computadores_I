@@ -25,7 +25,6 @@ public class Comunicacao implements Serializable {
 
     public static Comunicacao servidorRespondeSolicitacaoRecebimentoDeMensagensDoCliente(List<Mensagem> mensagens) {
         Comunicacao comunicacao = new Comunicacao();
-        comunicacao.requisicao = Requisicao.Receber;
         comunicacao.resposta = Resposta.Sucesso;
         comunicacao.mensagens = mensagens;
         return comunicacao;
@@ -33,7 +32,6 @@ public class Comunicacao implements Serializable {
 
     public static Comunicacao servidorRespondeSolicitacaoEnvioDeMensagemDoCliente() {
         Comunicacao comunicacao = new Comunicacao();
-        comunicacao.requisicao = Requisicao.Enviar;
         comunicacao.resposta = Resposta.Sucesso;
         return comunicacao;
     }

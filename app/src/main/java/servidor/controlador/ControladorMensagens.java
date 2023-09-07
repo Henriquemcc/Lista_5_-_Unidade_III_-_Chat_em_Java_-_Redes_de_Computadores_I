@@ -5,25 +5,31 @@ import comum.modelo.Mensagem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ControladorMensagens {
-        private final List<Mensagem> mensagens = new ArrayList<Mensagem>();
+        private final List<Mensagem> mensagens = Collections.synchronizedList(new ArrayList<>());
 
-        public void adicionarMensagem (Mensagem mensagem){
+    public void adicionarMensagem (Mensagem mensagem) {
+        synchronized (mensagem) {
             System.out.println("comum.modelo.Mensagem adicionada: " + mensagem);
             if (!mensagens.contains(mensagem))
                 mensagens.add(mensagem);
         }
+    }
 
-        public Mensagem retirarMensagem (String usuario) {
-            Mensagem mensagemParaUsuario = null;
-            for (Mensagem mensagem: mensagens) {
-                if (mensagem.nomeUsuarioDestinatario.equals(usuario)){
-                    mensagemParaUsuario = mensagem;
-                    mensagens.remove(mensagem);
+    public List<Mensagem> retirarMensagens (String usuario) {
+        List<Mensagem> mensagensParaUsuario = new ArrayList<>();
+        synchronized (mensagens) {
+            for (Mensagem mensagem : mensagens) {
+                if (mensagem.nomeUsuarioDestinatario.equals(usuario)) {
+                    System.out.println("comum.modelo.Mensagem retirada: " + mensagem);
+                    mensagensParaUsuario.add(mensagem);
                 }
             }
-            System.out.println("comum.modelo.Mensagem retirada: " + mensagemParaUsuario);
-            return mensagemParaUsuario;
+            mensagens.removeAll(mensagensParaUsuario);
         }
+
+        return mensagensParaUsuario;
+    }
 }

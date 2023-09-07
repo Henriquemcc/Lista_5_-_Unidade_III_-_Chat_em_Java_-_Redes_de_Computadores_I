@@ -89,7 +89,7 @@ public class ControladorMensagens {
         threadRecebimento.start();
     }
 
-    public List<Mensagem> retirarMensagens() {
+    public synchronized List<Mensagem> retirarMensagens() {
         List<Mensagem> mensagensRetiradas = new ArrayList<>();
         while (!listaRecebimento.isEmpty()) {
             mensagensRetiradas.add(listaRecebimento.remove(listaRecebimento.size() - 1));

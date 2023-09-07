@@ -49,12 +49,7 @@ public class TratadorCliente extends Thread {
                 }
                 System.out.println("resposta = " + resposta);
             } else if (requisicao.requisicao == Requisicao.Receber && requisicao.usuario != null && !requisicao.usuario.isEmpty()){
-                List<Mensagem> mensagens = new ArrayList<>();
-                Mensagem mensagem = Servidor.controladorMensagens.retirarMensagem(requisicao.usuario);
-                while (mensagem != null){
-                    mensagens.add(mensagem);
-                    mensagem = Servidor.controladorMensagens.retirarMensagem(requisicao.usuario);
-                }
+                List<Mensagem> mensagens = Servidor.controladorMensagens.retirarMensagens(requisicao.usuario);
 
                 // Respondendo ao cliente
                 Comunicacao resposta = Comunicacao.servidorRespondeSolicitacaoRecebimentoDeMensagensDoCliente(mensagens);
