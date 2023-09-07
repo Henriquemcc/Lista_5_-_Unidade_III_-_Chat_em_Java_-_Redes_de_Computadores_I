@@ -41,11 +41,6 @@ public class Cliente {
      */
     public static String destinatario = null;
 
-    /**
-     * Mensagens recebidas.
-     */
-    public static List<Mensagem> mensagens = Collections.synchronizedList(new ArrayList<>());
-
     public static boolean programaEmExecucao = true;
 
     /**

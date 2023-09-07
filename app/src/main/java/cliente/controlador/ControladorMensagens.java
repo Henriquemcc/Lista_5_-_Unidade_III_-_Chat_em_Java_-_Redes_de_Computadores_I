@@ -58,7 +58,7 @@ public class ControladorMensagens {
                 }
 
                 if (resposta != null && resposta.mensagens != null && !resposta.mensagens.isEmpty()) {
-                    System.out.println("Novas mensagens recebidas!");
+                    System.out.println("\nNovas mensagens recebidas!");
                     for (Mensagem mensagem : resposta.mensagens)
                         if (mensagem != null) listaRecebimento.add(mensagem);
                 }
@@ -87,6 +87,10 @@ public class ControladorMensagens {
         this.nomeUsuario = nomeUsuario;
 
         threadRecebimento.start();
+    }
+
+    public boolean novasMensagens() {
+        return !listaRecebimento.isEmpty();
     }
 
     public synchronized List<Mensagem> retirarMensagens() {

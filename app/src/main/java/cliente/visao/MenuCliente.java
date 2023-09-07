@@ -4,7 +4,7 @@ import cliente.controlador.Cliente;
 import comum.modelo.IntRange;
 import comum.modelo.Mensagem;
 import comum.modelo.ProtocoloTransporte;
-import comum.visao.*;
+import comum.visao.MyIO;
 import comum.visao.menu.Botao;
 import comum.visao.menu.Menu;
 import comum.visao.menu.Opcao;
@@ -12,6 +12,7 @@ import comum.visao.menu.Utilitarios;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MenuCliente {
     /**
@@ -95,31 +96,28 @@ public class MenuCliente {
         System.out.println("Protocolo de transporte: " + Cliente.protocoloTransporte);
         System.out.println("Nome de usuário: " + Cliente.nomeUsuario);
         System.out.println("Destinatário: " + Cliente.destinatario);
-        System.out.println("comum.modelo.Mensagem recebida: " + !Cliente.mensagens.isEmpty());
+        System.out.println("Mensagens recebidas: " + Cliente.controladorMensagens.novasMensagens());
     }
 
     private static void menuLerMensagemRecebida() {
         Utilitarios.imprimirCabecalho("Menu de exibição de mensagem recebida");
-        System.out.println("Mensagens recebidas: " + Cliente.mensagens.size());
-        for (int i = 0; i < Cliente.mensagens.size(); i++) {
-            System.out.println("De: " + Cliente.mensagens.get(i).nomeUsuarioRemetente);
-            System.out.println("Para: " + Cliente.mensagens.get(i).nomeUsuarioDestinatario);
-            System.out.println("Data de envio: " + Cliente.mensagens.get(i).dataEnvio);
-            System.out.println("comum.modelo.Mensagem: " + Cliente.mensagens.get(i).mensagem);
+        List<Mensagem> mensagensRecebidas = Cliente.controladorMensagens.retirarMensagens();
+        System.out.println("Mensagens recebidas: " + mensagensRecebidas.size());
+        for (int i = 0; i < mensagensRecebidas.size(); i++) {
+            System.out.println("De: " + mensagensRecebidas.get(i).nomeUsuarioRemetente);
+            System.out.println("Para: " + mensagensRecebidas.get(i).nomeUsuarioDestinatario);
+            System.out.println("Data de envio: " + mensagensRecebidas.get(i).dataEnvio);
+            System.out.println("comum.modelo.Mensagem: " + mensagensRecebidas.get(i).mensagem);
         }
-        boolean apagarMensagens = Utilitarios.obterConfirmacao("Deseja apagar todas as mensagens recebidas?");
-        if (apagarMensagens)
-            Cliente.mensagens.clear();
     }
 
     public static void menuPrincipal() {
 
         ArrayList<Opcao> opcoes = new ArrayList<>();
-        if (!Cliente.mensagens.isEmpty())
-            opcoes.add(new Botao("Ler mensagem recebida", () -> {
-                menuLerMensagemRecebida();
-                return null;
-            }));
+        opcoes.add(new Botao("Ler mensagem recebida", () -> {
+            menuLerMensagemRecebida();
+            return null;
+        }));
         opcoes.add(new Botao("Enviar mensagem", () -> {
             menuEnviarMensagem();
             return null;
