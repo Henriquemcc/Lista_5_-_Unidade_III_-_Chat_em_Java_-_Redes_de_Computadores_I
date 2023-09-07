@@ -25,17 +25,29 @@ public class Servidor {
     public static ControladorMensagens controladorMensagens =  new ControladorMensagens();
 
     public static Thread threadComunicacaoClientes = new Thread() {
-        @Override
-        public void run() {
+
+        private void comunicacaoClienteTcp() {
             try{
                 ServerSocket serverSocket = new ServerSocket(portaServidor);
                 while (true) {
-                    TratadorCliente tratadorCliente = new TratadorCliente(serverSocket.accept());
-                    tratadorCliente.start();
+                    TratadorClienteTcp tratadorClienteTcp = new TratadorClienteTcp(serverSocket.accept());
+                    tratadorClienteTcp.start();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        private void comunicacaoClienteUdp() {
+
+        }
+
+        @Override
+        public void run() {
+            if (protocoloTransporte == ProtocoloTransporte.TCP)
+                comunicacaoClienteTcp();
+            else if (protocoloTransporte == ProtocoloTransporte.UDP)
+                comunicacaoClienteUdp();
         }
     };
 

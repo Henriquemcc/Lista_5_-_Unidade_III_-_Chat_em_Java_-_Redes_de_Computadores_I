@@ -8,18 +8,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
-public class TratadorCliente extends Thread {
-
+public class TratadorClienteTcp extends Thread {
     private final Socket conexaoCliente;
 
-    public TratadorCliente(Socket conexaoCliente) {
+    public TratadorClienteTcp(Socket conexaoCliente) {
         System.out.println("Conectado com: " + conexaoCliente.getInetAddress() + ":" + conexaoCliente.getPort());
         this.conexaoCliente = conexaoCliente;
     }
-
 
     @Override
     public void run() {

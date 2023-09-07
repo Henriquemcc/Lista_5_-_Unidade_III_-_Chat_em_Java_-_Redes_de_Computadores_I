@@ -29,8 +29,7 @@ public class ControladorMensagens {
 
     private final Thread threadRecebimento = new Thread() {
 
-        @Override
-        public void run() {
+        private void receberTcp() {
             while (true) {
 
                 Socket socket = null;
@@ -75,7 +74,18 @@ public class ControladorMensagens {
                     e.printStackTrace();
                 }
             }
+        }
 
+        private void receberUdp() {
+
+        }
+
+        @Override
+        public void run() {
+            if (Cliente.protocoloTransporte == ProtocoloTransporte.TCP)
+                receberTcp();
+            else if (Cliente.protocoloTransporte == ProtocoloTransporte.UDP)
+                receberUdp();
 
         }
     };
@@ -102,7 +112,7 @@ public class ControladorMensagens {
         return mensagensRetiradas;
     }
 
-    public void enviarMensagem(Mensagem mensagem) {
+    private void enviarMensagemTcp(Mensagem mensagem) {
         Socket socket = null;
         try {
             socket = new Socket(InetAddress.getByName(enderecoServidor), portaServidor);
@@ -139,5 +149,17 @@ public class ControladorMensagens {
             erro = resposta == null || resposta.resposta != Resposta.Sucesso;
 
         } while (erro);
+    }
+
+    public void enviarMensagem(Mensagem mensagem) {
+        if (Cliente.protocoloTransporte == ProtocoloTransporte.TCP)
+            enviarMensagemTcp(mensagem);
+        else if (Cliente.protocoloTransporte == ProtocoloTransporte.UDP)
+            enviarMensagemUdp(mensagem);
+
+    }
+
+    private void enviarMensagemUdp(Mensagem mensagem) {
+
     }
 }
