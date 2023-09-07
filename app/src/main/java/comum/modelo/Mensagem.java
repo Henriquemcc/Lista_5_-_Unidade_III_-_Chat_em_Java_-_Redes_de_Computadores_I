@@ -15,4 +15,14 @@ public class Mensagem implements Serializable {
         this.dataEnvio = dataEnvio;
         this.nomeUsuarioDestinatario = nomeUsuarioDestinatario;
     }
+
+    @Override
+    public String toString() {
+        return "Mensagem{" +
+                "mensagem='" + mensagem + '\'' +
+                ", nomeUsuarioRemetente='" + nomeUsuarioRemetente + '\'' +
+                ", dataEnvio=" + dataEnvio +
+                ", nomeUsuarioDestinatario='" + nomeUsuarioDestinatario + '\'' +
+                '}';
+    }
 }

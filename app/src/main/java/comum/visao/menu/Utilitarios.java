@@ -21,7 +21,7 @@ public class Utilitarios {
      * Obtém do usuário a confirmação de uma ação.
      * Copiado e adaptado de outro projeto de autoria própria https://github.com/Henriquemcc/Dynamic_DNS_Update_Client/blob/main/app/src/main/kotlin/dynamic/dns/update/client/console/common/GetConfirmationConsole.kt
      *
-     * @param comando Comando que instruirá o usuário sobre o que ele deve confirmar.
+     * @param comando Requisicao que instruirá o usuário sobre o que ele deve confirmar.
      * @return Confirmação do usuário.
      */
     public static boolean obterConfirmacao(String comando) {

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ControladorMensagens {
-        private final List<Mensagem> mensagens = Collections.synchronizedList(new ArrayList<Mensagem>());
+        private final List<Mensagem> mensagens = new ArrayList<Mensagem>();
 
         public void adicionarMensagem (Mensagem mensagem){
             System.out.println("comum.modelo.Mensagem adicionada: " + mensagem);
