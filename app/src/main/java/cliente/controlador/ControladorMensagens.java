@@ -8,11 +8,8 @@ import comum.modelo.ProtocoloTransporte;
 import comum.modelo.Resposta;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +29,7 @@ public class ControladorMensagens {
 
         private void receberTcp() {
             while (true) {
-                try(Socket socket = new Socket(InetAddress.getByName(enderecoServidor), portaServidor)) {
+                try (Socket socket = new Socket(InetAddress.getByName(enderecoServidor), portaServidor)) {
                     // Enviando pedido para receber mensagens
                     Comunicacao requisicao = Comunicacao.cilenteSolicitaRecebimentoDeMensagens(nomeUsuario);
                     TCP.enviarObjeto(socket, requisicao);
@@ -59,10 +56,8 @@ public class ControladorMensagens {
 
         @Override
         public void run() {
-            if (Cliente.protocoloTransporte == ProtocoloTransporte.TCP)
-                receberTcp();
-            else if (Cliente.protocoloTransporte == ProtocoloTransporte.UDP)
-                receberUdp();
+            if (Cliente.protocoloTransporte == ProtocoloTransporte.TCP) receberTcp();
+            else if (Cliente.protocoloTransporte == ProtocoloTransporte.UDP) receberUdp();
 
         }
     };
@@ -90,49 +85,31 @@ public class ControladorMensagens {
     }
 
     private void enviarMensagemTcp(Mensagem mensagem) {
-        Socket socket = null;
-        try {
-            socket = new Socket(InetAddress.getByName(enderecoServidor), portaServidor);
-        } catch (IOException e) {
+        System.out.println("Enviando mensagem: " + mensagem);
+        List<Mensagem> mensagens = new ArrayList<>();
+        mensagens.add(mensagem);
+
+        try (Socket socket = new Socket(InetAddress.getByName(enderecoServidor), portaServidor)) {
+            boolean erro = false;
+            do {
+                // Enviando comunicação com a mensagem a ser enviada
+                Comunicacao requisicao = Comunicacao.clienteEnviaMensagem(mensagens);
+                TCP.enviarObjeto(socket, requisicao);
+                System.out.println("requisicao = " + requisicao);
+
+                // Recebendo resposta
+                Comunicacao resposta = (Comunicacao) TCP.receberObjeto(socket);
+                System.out.println("resposta = " + resposta);
+                erro = resposta == null || resposta.resposta != Resposta.Sucesso;
+            } while (erro);
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-        System.out.println("Enviando mensagem: " + mensagem);
-        boolean erro = false;
-        if (socket != null) do {
-
-            // Enviando comunicação com a mensagem a ser enviada
-            List<Mensagem> mensagens = new ArrayList<>();
-            mensagens.add(mensagem);
-            Comunicacao requisicao = Comunicacao.clienteEnviaMensagem(mensagens);
-            try {
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-                objectOutputStream.writeObject(requisicao);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            System.out.println("requisicao = " + requisicao);
-
-            // Recebendo resposta
-            Comunicacao resposta = null;
-            try {
-                ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
-                resposta = (Comunicacao) objectInputStream.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            System.out.println("resposta = " + resposta);
-
-            erro = resposta == null || resposta.resposta != Resposta.Sucesso;
-
-        } while (erro);
     }
 
     public void enviarMensagem(Mensagem mensagem) {
-        if (Cliente.protocoloTransporte == ProtocoloTransporte.TCP)
-            enviarMensagemTcp(mensagem);
-        else if (Cliente.protocoloTransporte == ProtocoloTransporte.UDP)
-            enviarMensagemUdp(mensagem);
+        if (Cliente.protocoloTransporte == ProtocoloTransporte.TCP) enviarMensagemTcp(mensagem);
+        else if (Cliente.protocoloTransporte == ProtocoloTransporte.UDP) enviarMensagemUdp(mensagem);
 
     }
 
