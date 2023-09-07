@@ -1,12 +1,11 @@
 package servidor.controlador;
 
+import comum.controlador.TCP;
 import comum.modelo.Comunicacao;
 import comum.modelo.Mensagem;
 import comum.modelo.Requisicao;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
@@ -20,44 +19,36 @@ public class TratadorClienteTcp extends Thread {
 
     @Override
     public void run() {
-        Comunicacao requisicao = null;
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(conexaoCliente.getInputStream());
-            requisicao = (Comunicacao) objectInputStream.readObject();
+            // Obtendo requisição
+            Comunicacao requisicao = (Comunicacao) TCP.receberObjeto(conexaoCliente);
+            System.out.println("requisicao = " + requisicao);
+
+            // Tratando requisição
+            if (requisicao != null) {
+
+                // Enviando mensagens
+                if (requisicao.requisicao == Requisicao.Enviar && requisicao.mensagens != null && !requisicao.mensagens.isEmpty()) {
+                    for (Mensagem mensagem : requisicao.mensagens)
+                        if (mensagem != null) Servidor.controladorMensagens.adicionarMensagem(mensagem);
+
+                    // Respondendo ao cliente
+                    Comunicacao resposta = Comunicacao.servidorRespondeSolicitacaoEnvioDeMensagemDoCliente();
+                    TCP.enviarObjeto(conexaoCliente, resposta);
+                    System.out.println("resposta = " + resposta);
+
+                // Recebendo mensagens
+                } else if (requisicao.requisicao == Requisicao.Receber && requisicao.usuario != null && !requisicao.usuario.isEmpty()) {
+                    List<Mensagem> mensagens = Servidor.controladorMensagens.retirarMensagens(requisicao.usuario);
+
+                    // Respondendo ao cliente
+                    Comunicacao resposta = Comunicacao.servidorRespondeSolicitacaoRecebimentoDeMensagensDoCliente(mensagens);
+                    TCP.enviarObjeto(conexaoCliente, resposta);
+                    System.out.println("resposta = " + resposta);
+                }
+            }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-        }
-        System.out.println("requisicao = " + requisicao);
-
-        if (requisicao != null)
-        {
-            if (requisicao.requisicao == Requisicao.Enviar && requisicao.mensagens != null && !requisicao.mensagens.isEmpty()) {
-                for (Mensagem mensagem: requisicao.mensagens)
-                    if (mensagem != null)
-                        Servidor.controladorMensagens.adicionarMensagem(mensagem);
-
-                // Respondendo ao cliente
-                Comunicacao resposta = Comunicacao.servidorRespondeSolicitacaoEnvioDeMensagemDoCliente();
-                try {
-                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(conexaoCliente.getOutputStream());
-                    objectOutputStream.writeObject(resposta);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("resposta = " + resposta);
-            } else if (requisicao.requisicao == Requisicao.Receber && requisicao.usuario != null && !requisicao.usuario.isEmpty()){
-                List<Mensagem> mensagens = Servidor.controladorMensagens.retirarMensagens(requisicao.usuario);
-
-                // Respondendo ao cliente
-                Comunicacao resposta = Comunicacao.servidorRespondeSolicitacaoRecebimentoDeMensagensDoCliente(mensagens);
-                try {
-                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(conexaoCliente.getOutputStream());
-                    objectOutputStream.writeObject(resposta);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("resposta = " + resposta);
-            }
         }
     }
 
