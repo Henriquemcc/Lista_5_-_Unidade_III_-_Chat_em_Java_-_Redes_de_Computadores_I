@@ -107,7 +107,7 @@ public class MenuCliente {
             System.out.println("De: " + mensagensRecebidas.get(i).nomeUsuarioRemetente);
             System.out.println("Para: " + mensagensRecebidas.get(i).nomeUsuarioDestinatario);
             System.out.println("Data de envio: " + mensagensRecebidas.get(i).dataEnvio);
-            System.out.println("comum.modelo.Mensagem: " + mensagensRecebidas.get(i).mensagem);
+            System.out.println("Mensagem: " + mensagensRecebidas.get(i).mensagem);
         }
     }
 
