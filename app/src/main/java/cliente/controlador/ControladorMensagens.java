@@ -1,6 +1,7 @@
 package cliente.controlador;
 
 
+import comum.controlador.TCP;
 import comum.modelo.Comunicacao;
 import comum.modelo.Mensagem;
 import comum.modelo.ProtocoloTransporte;
@@ -31,46 +32,22 @@ public class ControladorMensagens {
 
         private void receberTcp() {
             while (true) {
+                try(Socket socket = new Socket(InetAddress.getByName(enderecoServidor), portaServidor)) {
+                    // Enviando pedido para receber mensagens
+                    Comunicacao requisicao = Comunicacao.cilenteSolicitaRecebimentoDeMensagens(nomeUsuario);
+                    TCP.enviarObjeto(socket, requisicao);
 
-                Socket socket = null;
-                try {
-                    socket = new Socket(InetAddress.getByName(enderecoServidor), portaServidor);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    // Obtendo resposta
+                    Comunicacao resposta = (Comunicacao) TCP.receberObjeto(socket);
+                    if (resposta != null && resposta.mensagens != null && !resposta.mensagens.isEmpty()) {
+                        System.out.println("\nNovas mensagens recebidas!");
+                        for (Mensagem mensagem : resposta.mensagens)
+                            if (mensagem != null) listaRecebimento.add(mensagem);
+                    }
 
-                // Enviando pedido para receber mensagens
-                Comunicacao requisicao = Comunicacao.cilenteSolicitaRecebimentoDeMensagens(nomeUsuario);
-                try {
-                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-                    objectOutputStream.writeObject(requisicao);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Comunicacao resposta = null;
-                try {
-                    ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
-                    resposta = (Comunicacao) objectInputStream.readObject();
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                if (resposta != null && resposta.mensagens != null && !resposta.mensagens.isEmpty()) {
-                    System.out.println("\nNovas mensagens recebidas!");
-                    for (Mensagem mensagem : resposta.mensagens)
-                        if (mensagem != null) listaRecebimento.add(mensagem);
-                }
-
-                try {
                     Thread.sleep(Duration.ofMinutes(1).toMillis());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
-                try {
-                    socket.close();
-                } catch (IOException e) {
+                } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
