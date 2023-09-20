@@ -61,7 +61,7 @@ public class Cliente {
         // Temporário
         enderecoServidor = "127.0.0.1";
         portaServidor = 65535;
-        protocoloTransporte = ProtocoloTransporte.TCP;
+        protocoloTransporte = ProtocoloTransporte.UDP;
 
 
         configuracaoInicial();

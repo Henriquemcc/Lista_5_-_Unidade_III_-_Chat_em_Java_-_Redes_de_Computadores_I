@@ -2,12 +2,14 @@ package cliente.controlador;
 
 
 import comum.controlador.TCP;
+import comum.controlador.UDP;
 import comum.modelo.Comunicacao;
 import comum.modelo.Mensagem;
 import comum.modelo.ProtocoloTransporte;
 import comum.modelo.Resposta;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.time.Duration;
@@ -51,7 +53,35 @@ public class ControladorMensagens {
         }
 
         private void receberUdp() {
+            while (true) {
 
+                DatagramSocket datagramSocket = null;
+                try {
+                    InetAddress ipServidor = InetAddress.getByName(enderecoServidor);
+                    datagramSocket = new DatagramSocket();
+
+                    // Enviando pedido para receber mensagens
+                    Comunicacao requisicao = Comunicacao.cilenteSolicitaRecebimentoDeMensagens(nomeUsuario);
+                    UDP.enviarObjeto(requisicao, datagramSocket, ipServidor, portaServidor);
+
+                    // Obtendo resposta
+                    UDP.UdpObjetoRecebido udpObjetoRecebido = UDP.receberObjeto(datagramSocket);
+                    Comunicacao resposta = (Comunicacao) udpObjetoRecebido.object;
+                    if (resposta != null && resposta.mensagens != null && !resposta.mensagens.isEmpty()) {
+                        System.out.println("\nNovas mensagens recebidas!");
+                        for (Mensagem mensagem : resposta.mensagens)
+                            if (mensagem != null) listaRecebimento.add(mensagem);
+                    }
+
+                    Thread.sleep(Duration.ofMinutes(1).toMillis());
+
+                } catch (IOException | ClassNotFoundException | InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (datagramSocket != null)
+                        datagramSocket.close();
+                }
+            }
         }
 
         @Override
@@ -114,6 +144,32 @@ public class ControladorMensagens {
     }
 
     private void enviarMensagemUdp(Mensagem mensagem) {
+        System.out.println("Enviando mensagem: " + mensagem);
+        List<Mensagem> mensagens = new ArrayList<>();
+        mensagens.add(mensagem);
 
+        DatagramSocket datagramSocket = null;
+        try {
+            InetAddress ipServidor = InetAddress.getByName(enderecoServidor);
+            datagramSocket = new DatagramSocket();
+            boolean erro = false;
+            do {
+                // Enviando comunicação com a mensagem a ser enviada
+                Comunicacao requisicao = Comunicacao.clienteEnviaMensagem(mensagens);
+                UDP.enviarObjeto(requisicao, datagramSocket, ipServidor, portaServidor);
+                System.out.println("requisicao = " + requisicao);
+
+                // Recebendo resposta
+                UDP.UdpObjetoRecebido udpObjetoRecebido = UDP.receberObjeto(datagramSocket);
+                Comunicacao resposta = (Comunicacao) udpObjetoRecebido.object;
+                System.out.println("resposta = " + resposta);
+                erro = resposta == null || resposta.resposta != Resposta.Sucesso;
+            } while (erro);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (datagramSocket != null)
+                datagramSocket.close();
+        }
     }
 }

@@ -6,7 +6,10 @@ import comum.modelo.ProtocoloTransporte;
 import servidor.visao.MenuConsoleServidor;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
+import java.net.SocketException;
 
 public class Servidor {
 
@@ -39,7 +42,17 @@ public class Servidor {
         }
 
         private void comunicacaoClienteUdp() {
-
+            try(DatagramSocket socket = new DatagramSocket(portaServidor)) {
+                while (true) {
+                    byte[] bufferRecebimento = new byte[1024];
+                    DatagramPacket pacoteRecebido = new DatagramPacket(bufferRecebimento, bufferRecebimento.length);
+                    socket.receive(pacoteRecebido);
+                    TratadorClienteUdp tratadorClienteUdp = new TratadorClienteUdp(socket, pacoteRecebido);
+                    tratadorClienteUdp.start();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -63,7 +76,7 @@ public class Servidor {
         // Temporário
         System.out.println("servidor.controlador.Servidor rodando");
         portaServidor = 65535;
-        protocoloTransporte = ProtocoloTransporte.TCP;
+        protocoloTransporte = ProtocoloTransporte.UDP;
 
         configuracaoInicial();
         threadComunicacaoClientes.start();
