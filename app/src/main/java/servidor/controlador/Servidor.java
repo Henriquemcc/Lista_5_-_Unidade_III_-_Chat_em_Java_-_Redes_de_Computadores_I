@@ -25,9 +25,9 @@ public class Servidor {
 
     public static boolean programaEmExecucao = true;
 
-    public static ControladorMensagens controladorMensagens =  new ControladorMensagens();
+    public static final ControladorMensagens controladorMensagens =  new ControladorMensagens();
 
-    public static Thread threadComunicacaoClientes = new Thread() {
+    public static final Thread threadComunicacaoClientes = new Thread() {
 
         private void comunicacaoClienteTcp() {
             try{

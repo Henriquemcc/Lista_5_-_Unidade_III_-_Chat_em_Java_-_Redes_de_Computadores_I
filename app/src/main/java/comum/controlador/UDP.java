@@ -8,9 +8,9 @@ import java.net.InetAddress;
 public class UDP {
 
     public static class UdpObjetoRecebido {
-        public Object object;
-        public InetAddress ipOrigem;
-        public int portaOrigem;
+        public final Object object;
+        public final InetAddress ipOrigem;
+        public final int portaOrigem;
 
         public UdpObjetoRecebido(Object object, InetAddress ipOrigem, int portaOrigem) {
             this.object = object;
