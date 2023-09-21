@@ -11,16 +11,35 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.List;
 
+/**
+ * Thread responsável por responder um cliente via TCP.
+ */
 public class TratadorClienteUdp extends Thread {
+
+    /**
+     * Socket UDP.
+     */
     private final DatagramSocket socket;
+
+    /**
+     * Pacote Datagrama recebido.
+     */
     private final DatagramPacket pacoteRecebido;
 
+    /**
+     * Constrói uma nova instância da classe TratadorClienteUdp
+     * @param socket Socket UDP.
+     * @param pacoteRecebido Pacote Datagrama.
+     */
     public TratadorClienteUdp(DatagramSocket socket, DatagramPacket pacoteRecebido)
     {
         this.socket = socket;
         this.pacoteRecebido = pacoteRecebido;
     }
 
+    /**
+     * Executa a thread.
+     */
     @Override
     public void run() {
         try {

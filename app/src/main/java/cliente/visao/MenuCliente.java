@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Menus utilizados para a interação do usuário com o programa.
+ */
 public class MenuCliente {
     /**
      * Obtém do usuário o endereço do servidor.
@@ -59,6 +62,9 @@ public class MenuCliente {
         Cliente.protocoloTransporte = protocolo;
     }
 
+    /**
+     * Obtém do usuário o destinatário para o qual se deseja enviar uma mensagem.
+     */
     private static void menuDestinatario() {
         Utilitarios.imprimirCabecalho("Menu de alteração do destinatário");
         String novoDestinatario = MyIO.readString("Digite o nome de usuário do destinatario: ");
@@ -67,6 +73,9 @@ public class MenuCliente {
             Cliente.destinatario = novoDestinatario;
     }
 
+    /**
+     * Menu que realiza o envio de mensagens.
+     */
     private static void menuEnviarMensagem() {
         Utilitarios.imprimirCabecalho("Menu de envio de mensagem");
 
@@ -80,7 +89,9 @@ public class MenuCliente {
             Cliente.controladorMensagens.enviarMensagem(new Mensagem(mensagem, Cliente.nomeUsuario, LocalDateTime.now(), Cliente.destinatario));
     }
 
-
+    /**
+     * Obtém do usuário o nome de usuário que ele deseja utilizar.
+     */
     public static void menuNomeUsuario() {
         Utilitarios.imprimirCabecalho("Menu de alteração do nome de usuário");
         String novoNomeUsuario = MyIO.readString("Digite o seu nome de usuário: ");
@@ -89,6 +100,9 @@ public class MenuCliente {
             Cliente.nomeUsuario = novoNomeUsuario;
     }
 
+    /**
+     * Mostra informações sobre a execução do programa.
+     */
     private static void menuMostrarInformacoes() {
         Utilitarios.imprimirCabecalho("Menu de exibição das informações");
         System.out.println("Endereço do servidor: " + Cliente.enderecoServidor);
@@ -99,6 +113,9 @@ public class MenuCliente {
         System.out.println("Mensagens recebidas: " + Cliente.controladorMensagens.novasMensagens());
     }
 
+    /**
+     * Mostra as mensagens recebidas.
+     */
     private static void menuLerMensagemRecebida() {
         Utilitarios.imprimirCabecalho("Menu de exibição de mensagem recebida");
         List<Mensagem> mensagensRecebidas = Cliente.controladorMensagens.retirarMensagens();
@@ -111,6 +128,9 @@ public class MenuCliente {
         }
     }
 
+    /**
+     * Mostra o menu principal.
+     */
     public static void menuPrincipal() {
 
         ArrayList<Opcao> opcoes = new ArrayList<>();

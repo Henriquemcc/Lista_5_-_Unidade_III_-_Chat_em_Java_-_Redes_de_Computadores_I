@@ -21,17 +21,50 @@ import java.util.List;
  * Controlador responsável pelo envio e recepção de mensagens.
  */
 public class ControladorMensagens {
+
+    /**
+     * Endereço do servidor.
+     */
     private final String enderecoServidor;
+
+    /**
+     * Porta do servidor.
+     */
     private final int portaServidor;
+
+    /**
+     * Protocolo de transporte utilizado para comunicar com o servidor.
+     */
     private final ProtocoloTransporte protocoloTransporte;
+
+    /**
+     * Lista de mensagens recebidas do servidor.
+     */
     private final List<Mensagem> listaRecebimento = Collections.synchronizedList(new ArrayList<>());
+
+    /**
+     * Nome de usuário do cliente.
+     */
     private final String nomeUsuario;
 
+    /**
+     * Socket TCP utilizado para comunicar com o servidor.
+     */
     private Socket socketTcp = null;
+
+    /**
+     * Socket UDP utilizado para comunicar com o servidor.
+     */
     private DatagramSocket socketUdp = null;
 
+    /**
+     * Thread responsável por receber mensagens do servidor.
+     */
     private final Thread threadRecebimento = new Thread() {
 
+        /**
+         * Recebe mensagens do servidor, utilizando o protocolo TCP.
+         */
         private void receberTcp() {
             while (Cliente.programaEmExecucao) {
                 try {
@@ -64,6 +97,9 @@ public class ControladorMensagens {
             }
         }
 
+        /**
+         * Recebe mensagens do servidor, utilizando o protocolo UDP.
+         */
         private void receberUdp() {
             while (Cliente.programaEmExecucao) {
                 try {
@@ -94,6 +130,9 @@ public class ControladorMensagens {
             }
         }
 
+        /**
+         * Inicia a execução da thread para recebimento de mensagens do servidor.
+         */
         @Override
         public void run() {
             if (protocoloTransporte == ProtocoloTransporte.TCP) receberTcp();
@@ -101,6 +140,13 @@ public class ControladorMensagens {
         }
     };
 
+    /**
+     * Constrói uma instância da classe ControladorMensagens.
+     * @param enderecoServidor Endereço do servidor.
+     * @param portaServidor Porta do servidor.
+     * @param protocoloTransporte Protocolo de transporte utilizado para comunicar com o servidor.
+     * @param nomeUsuario Nome de usuário do cliente.
+     */
     public ControladorMensagens(String enderecoServidor, int portaServidor, ProtocoloTransporte protocoloTransporte, String nomeUsuario) {
         this.enderecoServidor = enderecoServidor;
         this.portaServidor = portaServidor;
@@ -110,10 +156,18 @@ public class ControladorMensagens {
         threadRecebimento.start();
     }
 
+    /**
+     * Verifica se existem novas mensagens recebidas.
+     * @return Valor booleano indicando se há novas mensagens recebidas.
+     */
     public boolean novasMensagens() {
         return !listaRecebimento.isEmpty();
     }
 
+    /**
+     * Retira mensagens recebidas da lista de recebimento.
+     * @return Lista de mensagens recebidas.
+     */
     public synchronized List<Mensagem> retirarMensagens() {
         List<Mensagem> mensagensRetiradas = new ArrayList<>();
         while (!listaRecebimento.isEmpty()) {
@@ -123,6 +177,10 @@ public class ControladorMensagens {
         return mensagensRetiradas;
     }
 
+    /**
+     * Envia uma mensagem para o servidor, utilizando o TCP.
+     * @param mensagem Mensagem a ser enviada para o servidor.
+     */
     private void enviarMensagemTcp(Mensagem mensagem) {
         System.out.println("Enviando mensagem: " + mensagem);
         List<Mensagem> mensagens = new ArrayList<>();
@@ -146,12 +204,20 @@ public class ControladorMensagens {
         }
     }
 
+    /**
+     * Envia uma mensagem para o servidor.
+     * @param mensagem Mensagem a ser enviada para o servidor.
+     */
     public void enviarMensagem(Mensagem mensagem) {
         if (Cliente.protocoloTransporte == ProtocoloTransporte.TCP) enviarMensagemTcp(mensagem);
         else if (Cliente.protocoloTransporte == ProtocoloTransporte.UDP) enviarMensagemUdp(mensagem);
 
     }
 
+    /**
+     * Envia uma mensagem para o servidor, utilizando o UDP.
+     * @param mensagem Mensagem a ser enviada para o servidor.
+     */
     private void enviarMensagemUdp(Mensagem mensagem) {
         System.out.println("Enviando mensagem: " + mensagem);
         List<Mensagem> mensagens = new ArrayList<>();
@@ -182,6 +248,9 @@ public class ControladorMensagens {
         }
     }
 
+    /**
+     * Finaliza a execução do controlador de mensagens.
+     */
     public void finalizar() {
         if (socketTcp != null)
             try {

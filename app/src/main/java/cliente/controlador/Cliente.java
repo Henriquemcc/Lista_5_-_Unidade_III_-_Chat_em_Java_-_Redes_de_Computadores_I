@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Classe principal do cliente.
+ */
 public class Cliente {
 
     /**
@@ -48,6 +51,9 @@ public class Cliente {
      */
     public static ControladorMensagens controladorMensagens = null;
 
+    /**
+     * Realiza a configuração inicial do cliente.
+     */
     public static void configuracaoInicial() {
         Utilitarios.imprimirCabecalho("Menu de configuração inicial");
         while (enderecoServidor == null) MenuCliente.menuEnderecoServidor();
@@ -56,12 +62,18 @@ public class Cliente {
         while (nomeUsuario == null) MenuCliente.menuNomeUsuario();
     }
 
+    /**
+     * Realiza o processo de finalização do cliente.
+     */
     public static void stop() {
         System.out.println("Finalizando o programa");
         programaEmExecucao = false;
         controladorMensagens.finalizar();
     }
 
+    /**
+     * Método principal do cliente.
+     */
     public static void main(String[] args) {
         configuracaoInicial();
         controladorMensagens = new ControladorMensagens(enderecoServidor, portaServidor, protocoloTransporte, nomeUsuario);
