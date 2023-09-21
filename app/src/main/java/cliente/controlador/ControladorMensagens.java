@@ -86,9 +86,8 @@ public class ControladorMensagens {
 
         @Override
         public void run() {
-            if (Cliente.protocoloTransporte == ProtocoloTransporte.TCP) receberTcp();
-            else if (Cliente.protocoloTransporte == ProtocoloTransporte.UDP) receberUdp();
-
+            if (protocoloTransporte == ProtocoloTransporte.TCP) receberTcp();
+            else if (protocoloTransporte == ProtocoloTransporte.UDP) receberUdp();
         }
     };
 
