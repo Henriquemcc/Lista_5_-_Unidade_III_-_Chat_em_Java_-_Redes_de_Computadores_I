@@ -57,13 +57,6 @@ public class Cliente {
     }
 
     public static void main(String[] args) {
-
-        // Temporário
-        enderecoServidor = "127.0.0.1";
-        portaServidor = 65535;
-        protocoloTransporte = ProtocoloTransporte.TCP;
-
-
         configuracaoInicial();
         controladorMensagens = new ControladorMensagens(enderecoServidor, portaServidor, protocoloTransporte, nomeUsuario);
         MenuCliente.menuPrincipal();
