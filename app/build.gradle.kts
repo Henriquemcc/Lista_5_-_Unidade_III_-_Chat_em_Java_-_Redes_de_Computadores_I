@@ -5,6 +5,9 @@
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/8.2.1/userguide/building_java_projects.html in the Gradle documentation.
  */
 
+val classePrincipalServidor = "servidor.controlador.Servidor"
+val classePrincipalCliente = "cliente.controlador.Cliente"
+
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -35,17 +38,17 @@ application {
     mainClass.set("io.github.henriquemcc.chat.java.ClientMain")
 }
 
-tasks.register<JavaExec>("runServer") {
+tasks.register<JavaExec>("executarServidor") {
     classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("servidor.controlador.Servidor")
+    mainClass.set(classePrincipalServidor)
 }
 
-tasks.register<JavaExec>("runClient1") {
+tasks.register<JavaExec>("executarCliente1") {
     classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("cliente.controlador.Cliente")
+    mainClass.set(classePrincipalCliente)
 }
 
-tasks.register<JavaExec>("runClient2") {
+tasks.register<JavaExec>("executarCliente2") {
     classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("cliente.controlador.Cliente")
+    mainClass.set(classePrincipalCliente)
 }
