@@ -12,8 +12,8 @@ import java.net.DatagramSocket;
 import java.util.List;
 
 public class TratadorClienteUdp extends Thread {
-    private DatagramSocket socket;
-    private DatagramPacket pacoteRecebido;
+    private final DatagramSocket socket;
+    private final DatagramPacket pacoteRecebido;
 
     public TratadorClienteUdp(DatagramSocket socket, DatagramPacket pacoteRecebido)
     {

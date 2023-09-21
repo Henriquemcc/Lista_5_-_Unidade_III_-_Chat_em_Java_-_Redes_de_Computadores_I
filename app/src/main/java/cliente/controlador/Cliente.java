@@ -56,9 +56,16 @@ public class Cliente {
         while (nomeUsuario == null) MenuCliente.menuNomeUsuario();
     }
 
+    public static void stop() {
+        System.out.println("Finalizando o programa");
+        programaEmExecucao = false;
+        controladorMensagens.finalizar();
+    }
+
     public static void main(String[] args) {
         configuracaoInicial();
         controladorMensagens = new ControladorMensagens(enderecoServidor, portaServidor, protocoloTransporte, nomeUsuario);
         MenuCliente.menuPrincipal();
+        stop();
     }
 }

@@ -32,7 +32,7 @@ public class Utilitarios {
         mensagem.append("> ");
 
         String entrada = null;
-        while (entrada == null || (entrada.charAt(0) != 'S' && entrada.charAt(0) != 'N')) {
+        while (entrada == null || entrada.isEmpty() || (entrada.charAt(0) != 'S' && entrada.charAt(0) != 'N')) {
             entrada = MyIO.readString(mensagem.toString()).toUpperCase();
         }
 
