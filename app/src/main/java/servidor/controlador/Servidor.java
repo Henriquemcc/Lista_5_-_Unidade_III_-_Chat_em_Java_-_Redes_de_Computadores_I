@@ -72,13 +72,8 @@ public class Servidor {
     }
 
     public static void main(String[] args) {
-
-        // Temporário
-        System.out.println("servidor.controlador.Servidor rodando");
-        portaServidor = 65535;
-        protocoloTransporte = ProtocoloTransporte.UDP;
-
         configuracaoInicial();
+        System.out.println("Executando o servidor");
         threadComunicacaoClientes.start();
     }
 }
