@@ -32,7 +32,7 @@ public class Servidor {
         private void comunicacaoClienteTcp() {
             try{
                 ServerSocket serverSocket = new ServerSocket(portaServidor);
-                while (true) {
+                while (programaEmExecucao) {
                     TratadorClienteTcp tratadorClienteTcp = new TratadorClienteTcp(serverSocket.accept());
                     tratadorClienteTcp.start();
                 }
@@ -43,7 +43,7 @@ public class Servidor {
 
         private void comunicacaoClienteUdp() {
             try(DatagramSocket socket = new DatagramSocket(portaServidor)) {
-                while (true) {
+                while (programaEmExecucao) {
                     byte[] bufferRecebimento = new byte[1024];
                     DatagramPacket pacoteRecebido = new DatagramPacket(bufferRecebimento, bufferRecebimento.length);
                     socket.receive(pacoteRecebido);

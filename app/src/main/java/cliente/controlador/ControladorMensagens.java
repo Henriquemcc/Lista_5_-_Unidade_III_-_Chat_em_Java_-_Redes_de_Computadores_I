@@ -30,7 +30,7 @@ public class ControladorMensagens {
     private final Thread threadRecebimento = new Thread() {
 
         private void receberTcp() {
-            while (true) {
+            while (Cliente.programaEmExecucao) {
                 try (Socket socket = new Socket(InetAddress.getByName(enderecoServidor), portaServidor)) {
                     // Enviando pedido para receber mensagens
                     Comunicacao requisicao = Comunicacao.cilenteSolicitaRecebimentoDeMensagens(nomeUsuario);
@@ -53,8 +53,7 @@ public class ControladorMensagens {
         }
 
         private void receberUdp() {
-            while (true) {
-
+            while (Cliente.programaEmExecucao) {
                 DatagramSocket datagramSocket = null;
                 try {
                     InetAddress ipServidor = InetAddress.getByName(enderecoServidor);
