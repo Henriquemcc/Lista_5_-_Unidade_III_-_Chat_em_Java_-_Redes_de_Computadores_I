@@ -1,6 +1,6 @@
 package comum.visao;
 
-import org.checkerframework.common.value.qual.IntRange;
+import comum.modelo.IntRange;
 
 import java.io.IOException;
 
