@@ -11,6 +11,9 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.SocketException;
 
+/**
+ * Classe principal do servidor.
+ */
 public class Servidor {
 
     /**
@@ -23,12 +26,24 @@ public class Servidor {
      */
     public static ProtocoloTransporte protocoloTransporte = null;
 
+    /**
+     * Indica se o programa está em execução.
+     */
     public static boolean programaEmExecucao = true;
 
+    /**
+     * Controlador de mensagens.
+     */
     public static final ControladorMensagens controladorMensagens =  new ControladorMensagens();
 
+    /**
+     * Thread responsável por se comunicar com os clientes.
+     */
     public static final Thread threadComunicacaoClientes = new Thread() {
 
+        /**
+         * Comunica com os clientes usando TCP.
+         */
         private void comunicacaoClienteTcp() {
             try{
                 ServerSocket serverSocket = new ServerSocket(portaServidor);
@@ -41,6 +56,9 @@ public class Servidor {
             }
         }
 
+        /**
+         * Comunica com os clientes usando UDP.
+         */
         private void comunicacaoClienteUdp() {
             try(DatagramSocket socket = new DatagramSocket(portaServidor)) {
                 while (programaEmExecucao) {
@@ -55,6 +73,9 @@ public class Servidor {
             }
         }
 
+        /**
+         * Executa a thread.
+         */
         @Override
         public void run() {
             if (protocoloTransporte == ProtocoloTransporte.TCP)
@@ -64,6 +85,9 @@ public class Servidor {
         }
     };
 
+    /**
+     * Realiza a configuração inicial do servidor.
+     */
     public static void configuracaoInicial() {
         while (portaServidor == null)
             MenuConsoleServidor.menuPortaServidor();
@@ -71,6 +95,9 @@ public class Servidor {
             MenuConsoleServidor.menuProtocoloTransporte();
     }
 
+    /**
+     * Método principal do servidor.
+     */
     public static void main(String[] args) {
         configuracaoInicial();
         System.out.println("Executando o servidor");

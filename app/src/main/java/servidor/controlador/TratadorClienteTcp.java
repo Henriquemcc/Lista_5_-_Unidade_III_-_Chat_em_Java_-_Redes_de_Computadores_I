@@ -9,14 +9,28 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
+/**
+ * Thread responsável por responder um cliente via TCP.
+ */
 public class TratadorClienteTcp extends Thread {
+
+    /**
+     * Socket TCP.
+     */
     private final Socket conexaoCliente;
 
+    /**
+     * Constrói uma nova instância da classe TratadorClienteTcp.
+     * @param conexaoCliente Socket TCP.
+     */
     public TratadorClienteTcp(Socket conexaoCliente) {
         System.out.println("Conectado com: " + conexaoCliente.getInetAddress() + ":" + conexaoCliente.getPort());
         this.conexaoCliente = conexaoCliente;
     }
 
+    /**
+     * Executa a thread.
+     */
     @Override
     public void run() {
         try {

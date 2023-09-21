@@ -2,8 +2,15 @@ package comum.visao.menu;
 
 import comum.visao.MyIO;
 
+/**
+ * Utilitários utilizados nos menus.
+ */
 public class Utilitarios {
 
+    /**
+     * Imprime o cabeçalho de um menu.
+     * @param titulo Título do cabeçalho do menu.
+     */
     public static void imprimirCabecalho(String titulo) {
         for (int i = 0; i < 80; i++) {
             System.out.print("#");
@@ -19,8 +26,6 @@ public class Utilitarios {
 
     /**
      * Obtém do usuário a confirmação de uma ação.
-     * Copiado e adaptado de outro projeto de autoria própria https://github.com/Henriquemcc/Dynamic_DNS_Update_Client/blob/main/app/src/main/kotlin/dynamic/dns/update/client/console/common/GetConfirmationConsole.kt
-     *
      * @param comando Requisicao que instruirá o usuário sobre o que ele deve confirmar.
      * @return Confirmação do usuário.
      */

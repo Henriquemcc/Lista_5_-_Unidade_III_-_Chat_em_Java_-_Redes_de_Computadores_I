@@ -7,9 +7,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * Controlador responsável por armazenar as mensagens a serem encaminhadas.
+ */
 public class ControladorMensagens {
-        private final List<Mensagem> mensagens = Collections.synchronizedList(new ArrayList<>());
 
+    /**
+     * Lista de mensagens a serem encaminhadas.
+     */
+    private final List<Mensagem> mensagens = Collections.synchronizedList(new ArrayList<>());
+
+    /**
+     * Adiciona uma mensagem à lista.
+     * @param mensagem Mensagem a ser adicionada.
+     */
     public void adicionarMensagem (Mensagem mensagem) {
         synchronized (mensagem) {
             System.out.println("comum.modelo.Mensagem adicionada: " + mensagem);
@@ -18,6 +29,11 @@ public class ControladorMensagens {
         }
     }
 
+    /**
+     * Retira mensagens da lista.
+     * @param usuario Nome do usuário do destinatário da mensagem.
+     * @return Lista de mensagens para o destinatário especificado.
+     */
     public List<Mensagem> retirarMensagens (String usuario) {
         List<Mensagem> mensagensParaUsuario = new ArrayList<>();
         synchronized (mensagens) {

@@ -11,6 +11,9 @@ import servidor.controlador.Servidor;
 
 import java.util.ArrayList;
 
+/**
+ * Menu do servidor.
+ */
 public class MenuConsoleServidor {
     /**
      * Obtém do usuário a porta do servidor.
@@ -45,6 +48,9 @@ public class MenuConsoleServidor {
         Servidor.protocoloTransporte = protocolo;
     }
 
+    /**
+     * Mostra o menu principal do servidor.
+     */
     public static void menuPrincipal() {
         ArrayList<Opcao> opcoes = new ArrayList<>();
         opcoes.add(new Botao("Alterar porta do servidor", () -> {

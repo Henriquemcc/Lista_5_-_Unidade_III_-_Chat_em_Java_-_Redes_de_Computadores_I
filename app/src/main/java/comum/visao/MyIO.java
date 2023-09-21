@@ -6,10 +6,14 @@ import java.io.IOException;
 
 /**
  * Classe que contém os métodos de input e output.
- * Copiado e adaptado de outro projeto de autoria própria https://github.com/Henriquemcc/Dynamic_DNS_Update_Client/tree/main/app/src/main/kotlin/dynamic/dns/update/client/console/common/myio
  */
 public class MyIO {
 
+    /**
+     * Lê uma String da entrada do usuário.
+     * @param instrucao Explicação para o usuário o que ele deve digitar.
+     * @return String lida da entrada.
+     */
     public static String readString(String instrucao) {
         if (instrucao != null)
             System.out.print(instrucao);
@@ -17,6 +21,10 @@ public class MyIO {
         return readString();
     }
 
+    /**
+     * Realiza a leitura da entrada do usuário.
+     * @return String lida da entrada.
+     */
     private static String readLine() {
         StringBuilder string = new StringBuilder();
         char tmp;
@@ -33,6 +41,10 @@ public class MyIO {
         return string.toString();
     }
 
+    /**
+     * Lê uma String da entrada do usuário.
+     * @return String lida da entrada.
+     */
     public static String readString() {
         return readLine();
     }
@@ -55,6 +67,10 @@ public class MyIO {
         return numero;
     }
 
+    /**
+     * Lê um número inteiro da entrada do usuário.
+     * @return Número inteiro lido da entrada.
+     */
     public static int readInt() {
         return readInt(null, null);
     }

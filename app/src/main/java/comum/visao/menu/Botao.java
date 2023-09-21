@@ -4,12 +4,24 @@ import java.util.function.Supplier;
 
 /**
  * Botão do console, que contém o texto dele e a ação a ser executada quando ele é selecionado.
- * Copiado e adaptado de outro projeto de autoria própria https://github.com/Henriquemcc/Dynamic_DNS_Update_Client/blob/main/app/src/main/kotlin/dynamic/dns/update/client/console/common/menu/ConsoleButton.kt
  */
 public class Botao extends Opcao {
+
+    /**
+     * Texto do botão.
+     */
     final String texto;
+
+    /**
+     * Ação a ser executada quando o botão é pressionado.
+     */
     final Supplier<Void> quandoPressionado;
 
+    /**
+     * Constrói uma nova instância da classe Botao.
+     * @param texto Texto do botão.
+     * @param quandoPressionado Ação a ser executada quando o botão é pressionado.
+     */
     public Botao(String texto, Supplier<Void> quandoPressionado) {
         this.texto = texto;
         this.quandoPressionado = quandoPressionado;

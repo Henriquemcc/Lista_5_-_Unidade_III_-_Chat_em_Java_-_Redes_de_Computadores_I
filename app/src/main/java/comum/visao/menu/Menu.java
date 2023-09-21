@@ -8,14 +8,33 @@ import java.util.List;
 
 /**
  * Um menu de console cuja mensagem não muda durante a execução.
- * Copiado e adaptado de outro projeto de autoria própria https://github.com/Henriquemcc/Dynamic_DNS_Update_Client/blob/12e62a8f86179d441c22baab107bb20d27bef8c9/app/src/main/kotlin/dynamic/dns/update/client/console/common/menu/StaticConsoleMenu.kt
  */
 public class Menu {
+
+    /**
+     * Título do menu.
+     */
     private final String titulo;
+
+    /**
+     * Opções do menu.
+     */
     private final List<Opcao> opcoes;
+
+    /**
+     * Texto para apresentar as opções disponíveis.
+     */
     private final Texto textoOpcoes;
+
+    /**
+     * Texto a ser mostrado na opção para sair do menu.
+     */
     private final Texto textoSaida;
 
+    /**
+     * Obtém uma lista com os botões do menu.
+     * @return Lista com os botões do menu.
+     */
     private List<Botao> obterBotoes() {
         final List<Botao> botoesConsole = new ArrayList<>();
         for (Opcao opcao: opcoes) {
@@ -26,10 +45,18 @@ public class Menu {
         return botoesConsole;
     }
 
+    /**
+     * Obtém o número de botões.
+     * @return Número de botões.
+     */
     private int obterNumeroBotoes() {
         return obterBotoes().size();
     }
 
+    /**
+     * Obtém mensagem a ser impressa na tela do usuário.
+     * @return Mensagem a ser impressa na tela do usuário.
+     */
     private String obterMensagem() {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(textoOpcoes.texto).append("\n");
@@ -48,10 +75,21 @@ public class Menu {
         return stringBuilder.toString();
     }
 
+    /**
+     * Obtém opção digitada pelo usuário.
+     * @return Opção digitada pelo usuário.
+     */
     private int obterEntrada() {
         return MyIO.readInt(obterMensagem(), new IntRange(0, obterNumeroBotoes()));
     }
 
+    /**
+     * Constrói uma nova instância da classe Menu.
+     * @param titulo Título do menu.
+     * @param opcoes Opções do menu.
+     * @param textoOpcoes Texto das opções do menu.
+     * @param textoSaida Texto da opção de sair do menu.
+     */
     public Menu(String titulo, List<Opcao> opcoes, Texto textoOpcoes, Texto textoSaida) {
         this.titulo = titulo;
         this.opcoes = opcoes;
@@ -72,10 +110,19 @@ public class Menu {
         }
     }
 
+    /**
+     * Constrói uma nova instância da classe Menu.
+     * @param titulo Título do menu.
+     * @param opcoes Opções do menu.
+     */
     public Menu(String titulo, List<Opcao> opcoes) {
         this(titulo, opcoes, new Texto("Opções: "), new Texto("Sair"));
     }
 
+    /**
+     * Constrói uma nova instância da classe Menu.
+     * @param opcoes Opções do menu.
+     */
     public Menu(List<Opcao> opcoes) {
         this(null, opcoes, new Texto("Opções: "), new Texto("Sair"));
     }
