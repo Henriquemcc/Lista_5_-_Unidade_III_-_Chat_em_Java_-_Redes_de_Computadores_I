@@ -27,17 +27,22 @@ public class ControladorMensagens {
     private final List<Mensagem> listaRecebimento = Collections.synchronizedList(new ArrayList<>());
     private final String nomeUsuario;
 
+    private Socket socketTcp = null;
+    private DatagramSocket socketUdp = null;
+
     private final Thread threadRecebimento = new Thread() {
 
         private void receberTcp() {
             while (Cliente.programaEmExecucao) {
-                try (Socket socket = new Socket(InetAddress.getByName(enderecoServidor), portaServidor)) {
+                try {
+                    socketTcp = new Socket(InetAddress.getByName(enderecoServidor), portaServidor);
+
                     // Enviando pedido para receber mensagens
                     Comunicacao requisicao = Comunicacao.cilenteSolicitaRecebimentoDeMensagens(nomeUsuario);
-                    TCP.enviarObjeto(socket, requisicao);
+                    TCP.enviarObjeto(socketTcp, requisicao);
 
                     // Obtendo resposta
-                    Comunicacao resposta = (Comunicacao) TCP.receberObjeto(socket);
+                    Comunicacao resposta = (Comunicacao) TCP.receberObjeto(socketTcp);
                     if (resposta != null && resposta.mensagens != null && !resposta.mensagens.isEmpty()) {
                         System.out.println("\nNovas mensagens recebidas!");
                         for (Mensagem mensagem : resposta.mensagens)
@@ -48,23 +53,29 @@ public class ControladorMensagens {
 
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
+                } finally {
+                    if (socketTcp != null)
+                        try {
+                            socketTcp.close();
+                        } catch (IOException e){
+                            e.printStackTrace();
+                        }
                 }
             }
         }
 
         private void receberUdp() {
             while (Cliente.programaEmExecucao) {
-                DatagramSocket datagramSocket = null;
                 try {
                     InetAddress ipServidor = InetAddress.getByName(enderecoServidor);
-                    datagramSocket = new DatagramSocket();
+                    socketUdp = new DatagramSocket();
 
                     // Enviando pedido para receber mensagens
                     Comunicacao requisicao = Comunicacao.cilenteSolicitaRecebimentoDeMensagens(nomeUsuario);
-                    UDP.enviarObjeto(requisicao, datagramSocket, ipServidor, portaServidor);
+                    UDP.enviarObjeto(requisicao, socketUdp, ipServidor, portaServidor);
 
                     // Obtendo resposta
-                    UDP.UdpObjetoRecebido udpObjetoRecebido = UDP.receberObjeto(datagramSocket);
+                    UDP.UdpObjetoRecebido udpObjetoRecebido = UDP.receberObjeto(socketUdp);
                     Comunicacao resposta = (Comunicacao) udpObjetoRecebido.object;
                     if (resposta != null && resposta.mensagens != null && !resposta.mensagens.isEmpty()) {
                         System.out.println("\nNovas mensagens recebidas!");
@@ -77,8 +88,8 @@ public class ControladorMensagens {
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-                    if (datagramSocket != null)
-                        datagramSocket.close();
+                    if (socketUdp != null)
+                        socketUdp.close();
                 }
             }
         }
@@ -169,5 +180,16 @@ public class ControladorMensagens {
             if (datagramSocket != null)
                 datagramSocket.close();
         }
+    }
+
+    public void finalizar() {
+        if (socketTcp != null)
+            try {
+                socketTcp.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        if (socketUdp != null)
+            socketUdp.close();
     }
 }
