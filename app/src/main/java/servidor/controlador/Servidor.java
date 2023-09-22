@@ -3,13 +3,7 @@ package servidor.controlador;/*
  */
 
 import comum.modelo.ProtocoloTransporte;
-import servidor.visao.MenuConsoleServidor;
-
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.net.SocketException;
+import servidor.visao.MenuServidor;
 
 /**
  * Classe principal do servidor.
@@ -39,68 +33,32 @@ public class Servidor {
     /**
      * Thread responsável por se comunicar com os clientes.
      */
-    public static final Thread threadComunicacaoClientes = new Thread() {
-
-        /**
-         * Comunica com os clientes usando TCP.
-         */
-        private void comunicacaoClienteTcp() {
-            try{
-                ServerSocket serverSocket = new ServerSocket(portaServidor);
-                while (programaEmExecucao) {
-                    TratadorClienteTcp tratadorClienteTcp = new TratadorClienteTcp(serverSocket.accept());
-                    tratadorClienteTcp.start();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        /**
-         * Comunica com os clientes usando UDP.
-         */
-        private void comunicacaoClienteUdp() {
-            try(DatagramSocket socket = new DatagramSocket(portaServidor)) {
-                while (programaEmExecucao) {
-                    byte[] bufferRecebimento = new byte[1024];
-                    DatagramPacket pacoteRecebido = new DatagramPacket(bufferRecebimento, bufferRecebimento.length);
-                    socket.receive(pacoteRecebido);
-                    TratadorClienteUdp tratadorClienteUdp = new TratadorClienteUdp(socket, pacoteRecebido);
-                    tratadorClienteUdp.start();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        /**
-         * Executa a thread.
-         */
-        @Override
-        public void run() {
-            if (protocoloTransporte == ProtocoloTransporte.TCP)
-                comunicacaoClienteTcp();
-            else if (protocoloTransporte == ProtocoloTransporte.UDP)
-                comunicacaoClienteUdp();
-        }
-    };
+    public static ThreadComunicacaoClientes threadComunicacaoClientes = null;
 
     /**
-     * Realiza a configuração inicial do servidor.
+     * Realiza o processo de finalização do cliente.
      */
-    public static void configuracaoInicial() {
-        while (portaServidor == null)
-            MenuConsoleServidor.menuPortaServidor();
-        while (protocoloTransporte == null)
-            MenuConsoleServidor.menuProtocoloTransporte();
+    private static void finalizar() {
+        programaEmExecucao = false;
+        threadComunicacaoClientes.finalizar();
+    }
+
+    private static void configurarInterrupcao() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            finalizar();
+        }));
     }
 
     /**
      * Método principal do servidor.
      */
     public static void main(String[] args) {
-        configuracaoInicial();
+        configurarInterrupcao();
+        MenuServidor.configuracaoInicial();
         System.out.println("Executando o servidor");
         threadComunicacaoClientes.start();
+        MenuServidor.menuPrincipal();
+        System.out.println("Finalizando o servidor");
+        finalizar();
     }
 }

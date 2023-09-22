@@ -23,7 +23,6 @@ public class ControladorMensagens {
      */
     public void adicionarMensagem (Mensagem mensagem) {
         synchronized (mensagem) {
-            System.out.println("comum.modelo.Mensagem adicionada: " + mensagem);
             if (!mensagens.contains(mensagem))
                 mensagens.add(mensagem);
         }
@@ -39,7 +38,6 @@ public class ControladorMensagens {
         synchronized (mensagens) {
             for (Mensagem mensagem : mensagens) {
                 if (mensagem.nomeUsuarioDestinatario.equals(usuario)) {
-                    System.out.println("comum.modelo.Mensagem retirada: " + mensagem);
                     mensagensParaUsuario.add(mensagem);
                 }
             }

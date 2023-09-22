@@ -52,32 +52,28 @@ public class Cliente {
     public static ControladorMensagens controladorMensagens = null;
 
     /**
-     * Realiza a configuração inicial do cliente.
-     */
-    public static void configuracaoInicial() {
-        Utilitarios.imprimirCabecalho("Menu de configuração inicial");
-        while (enderecoServidor == null) MenuCliente.menuEnderecoServidor();
-        while (portaServidor == null) MenuCliente.menuPortaServidor();
-        while (protocoloTransporte == null) MenuCliente.menuProtocoloTransporte();
-        while (nomeUsuario == null) MenuCliente.menuNomeUsuario();
-    }
-
-    /**
      * Realiza o processo de finalização do cliente.
      */
-    public static void stop() {
-        System.out.println("Finalizando o programa");
+    private static void finalizar() {
         programaEmExecucao = false;
         controladorMensagens.finalizar();
+    }
+
+    private static void configurarInterrupcao() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            finalizar();
+        }));
     }
 
     /**
      * Método principal do cliente.
      */
     public static void main(String[] args) {
-        configuracaoInicial();
+        configurarInterrupcao();
+        MenuCliente.configuracaoInicial();
         controladorMensagens = new ControladorMensagens(enderecoServidor, portaServidor, protocoloTransporte, nomeUsuario);
         MenuCliente.menuPrincipal();
-        stop();
+        System.out.println("Finalizando o programa");
+        finalizar();
     }
 }
