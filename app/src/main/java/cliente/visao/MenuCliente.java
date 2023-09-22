@@ -121,13 +121,15 @@ public class MenuCliente {
      */
     private static void menuLerMensagemRecebida() {
         Utilitarios.imprimirCabecalho("Menu de exibição de mensagem recebida");
-        List<Mensagem> mensagensRecebidas = Cliente.controladorMensagens.retirarMensagens();
-        System.out.println("Mensagens recebidas: " + mensagensRecebidas.size());
-        for (int i = 0; i < mensagensRecebidas.size(); i++) {
-            System.out.println("De: " + mensagensRecebidas.get(i).nomeUsuarioRemetente);
-            System.out.println("Para: " + mensagensRecebidas.get(i).nomeUsuarioDestinatario);
-            System.out.println("Data de envio: " + mensagensRecebidas.get(i).dataEnvio);
-            System.out.println("Mensagem: " + mensagensRecebidas.get(i).mensagem);
+        if (Cliente.controladorMensagens != null) {
+            List<Mensagem> mensagensRecebidas = Cliente.controladorMensagens.retirarMensagens();
+            System.out.println("Mensagens recebidas: " + mensagensRecebidas.size());
+            for (int i = 0; i < mensagensRecebidas.size(); i++) {
+                System.out.println("De: " + mensagensRecebidas.get(i).nomeUsuarioRemetente);
+                System.out.println("Para: " + mensagensRecebidas.get(i).nomeUsuarioDestinatario);
+                System.out.println("Data de envio: " + mensagensRecebidas.get(i).dataEnvio);
+                System.out.println("Mensagem: " + mensagensRecebidas.get(i).mensagem);
+            }
         }
     }
 
