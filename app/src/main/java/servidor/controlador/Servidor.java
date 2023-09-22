@@ -3,13 +3,7 @@ package servidor.controlador;/*
  */
 
 import comum.modelo.ProtocoloTransporte;
-import servidor.visao.MenuConsoleServidor;
-
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.net.SocketException;
+import servidor.visao.MenuServidor;
 
 /**
  * Classe principal do servidor.
@@ -42,17 +36,6 @@ public class Servidor {
     public static ThreadComunicacaoClientes threadComunicacaoClientes = null;
 
     /**
-     * Realiza a configuração inicial do servidor.
-     */
-    public static void configuracaoInicial() {
-        while (portaServidor == null)
-            MenuConsoleServidor.menuPortaServidor();
-        while (protocoloTransporte == null)
-            MenuConsoleServidor.menuProtocoloTransporte();
-        threadComunicacaoClientes = new ThreadComunicacaoClientes(portaServidor, protocoloTransporte);
-    }
-
-    /**
      * Realiza o processo de finalização do cliente.
      */
     private static void finalizar() {
@@ -72,7 +55,7 @@ public class Servidor {
      */
     public static void main(String[] args) {
         configurarInterrupcao();
-        configuracaoInicial();
+        MenuServidor.configuracaoInicial();
         System.out.println("Executando o servidor");
         threadComunicacaoClientes.start();
     }

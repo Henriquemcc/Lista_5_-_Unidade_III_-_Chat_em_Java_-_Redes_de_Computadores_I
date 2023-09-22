@@ -8,13 +8,14 @@ import comum.visao.menu.Menu;
 import comum.visao.menu.Opcao;
 import comum.visao.menu.Utilitarios;
 import servidor.controlador.Servidor;
+import servidor.controlador.ThreadComunicacaoClientes;
 
 import java.util.ArrayList;
 
 /**
  * Menu do servidor.
  */
-public class MenuConsoleServidor {
+public class MenuServidor {
     /**
      * Obtém do usuário a porta do servidor.
      */
@@ -46,6 +47,17 @@ public class MenuConsoleServidor {
             protocolo = ProtocoloTransporte.UDP;
 
         Servidor.protocoloTransporte = protocolo;
+    }
+
+    /**
+     * Realiza a configuração inicial do servidor.
+     */
+    public static void configuracaoInicial() {
+        while (Servidor.portaServidor == null)
+            MenuServidor.menuPortaServidor();
+        while (Servidor.protocoloTransporte == null)
+            MenuServidor.menuProtocoloTransporte();
+        Servidor.threadComunicacaoClientes = new ThreadComunicacaoClientes(Servidor.portaServidor, Servidor.protocoloTransporte);
     }
 
     /**
