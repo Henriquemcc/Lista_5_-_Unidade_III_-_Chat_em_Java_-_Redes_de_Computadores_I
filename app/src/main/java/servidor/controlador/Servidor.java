@@ -39,7 +39,6 @@ public class Servidor {
      * Realiza o processo de finalização do cliente.
      */
     private static void finalizar() {
-        System.out.println("Finalizando o servidor");
         programaEmExecucao = false;
         threadComunicacaoClientes.finalizar();
     }
@@ -58,5 +57,8 @@ public class Servidor {
         MenuServidor.configuracaoInicial();
         System.out.println("Executando o servidor");
         threadComunicacaoClientes.start();
+        MenuServidor.menuPrincipal();
+        System.out.println("Finalizando o servidor");
+        finalizar();
     }
 }

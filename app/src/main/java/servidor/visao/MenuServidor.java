@@ -23,8 +23,14 @@ public class MenuServidor {
         Utilitarios.imprimirCabecalho("Menu de alteração da porta do servidor");
         int novaPortaServidor = MyIO.readInt("Digite a porta do servidor: ", new IntRange(1, 65535));
         boolean confirmacao = Utilitarios.obterConfirmacao("Deseja alterar a porta do servidor para " + novaPortaServidor + "?");
-        if (confirmacao)
+        if (confirmacao) {
             Servidor.portaServidor = novaPortaServidor;
+            if (Servidor.threadComunicacaoClientes != null) {
+                Servidor.threadComunicacaoClientes.finalizar();
+                Servidor.threadComunicacaoClientes = new ThreadComunicacaoClientes(Servidor.portaServidor, Servidor.protocoloTransporte);
+                Servidor.threadComunicacaoClientes.start();
+            }
+        }
     }
 
     /**
@@ -46,7 +52,15 @@ public class MenuServidor {
         else
             protocolo = ProtocoloTransporte.UDP;
 
-        Servidor.protocoloTransporte = protocolo;
+        boolean confirmacao = Utilitarios.obterConfirmacao("Deseja alterar o protocolo de transporte do servidor para " + protocolo + "?");
+        if (confirmacao) {
+            Servidor.protocoloTransporte = protocolo;
+            if (Servidor.threadComunicacaoClientes != null) {
+                Servidor.threadComunicacaoClientes.finalizar();
+                Servidor.threadComunicacaoClientes = new ThreadComunicacaoClientes(Servidor.portaServidor, Servidor.protocoloTransporte);
+                Servidor.threadComunicacaoClientes.start();
+            }
+        }
     }
 
     /**
