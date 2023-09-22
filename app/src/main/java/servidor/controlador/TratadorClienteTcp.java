@@ -66,4 +66,15 @@ public class TratadorClienteTcp extends Thread {
         }
     }
 
+    /**
+     * Finaliza a conexão com o cliente.
+     */
+    public void finalizar() {
+        if (conexaoCliente != null) try {
+            conexaoCliente.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

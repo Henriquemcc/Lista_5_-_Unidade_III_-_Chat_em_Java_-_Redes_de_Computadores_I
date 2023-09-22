@@ -76,4 +76,12 @@ public class TratadorClienteUdp extends Thread {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Finaliza a conexão com o cliente.
+     */
+    public void finalizar() {
+        if (socket != null)
+            socket.close();
+    }
 }

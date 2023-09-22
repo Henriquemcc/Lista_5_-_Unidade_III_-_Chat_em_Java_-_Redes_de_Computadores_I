@@ -65,19 +65,26 @@ public class Cliente {
     /**
      * Realiza o processo de finalização do cliente.
      */
-    public static void stop() {
-        System.out.println("Finalizando o programa");
+    private static void finalizar() {
         programaEmExecucao = false;
         controladorMensagens.finalizar();
+    }
+
+    private static void configurarInterrupcao() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            finalizar();
+        }));
     }
 
     /**
      * Método principal do cliente.
      */
     public static void main(String[] args) {
+        configurarInterrupcao();
         configuracaoInicial();
         controladorMensagens = new ControladorMensagens(enderecoServidor, portaServidor, protocoloTransporte, nomeUsuario);
         MenuCliente.menuPrincipal();
-        stop();
+        System.out.println("Finalizando o programa");
+        finalizar();
     }
 }
