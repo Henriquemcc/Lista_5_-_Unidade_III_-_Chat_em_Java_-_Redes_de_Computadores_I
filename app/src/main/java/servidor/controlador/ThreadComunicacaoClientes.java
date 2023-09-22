@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Thread responsável por comunicar com os clientes.
  */
-public class ThreadComunicacaoClientes extends Thread{
+public class ThreadComunicacaoClientes extends Thread {
 
     /**
      * Porta a qual será utilizada para se comunicar com os clientes
@@ -24,35 +24,31 @@ public class ThreadComunicacaoClientes extends Thread{
      * Protocolo de transporte utilizado para se comunicar com os clientes.
      */
     private final ProtocoloTransporte protocoloTransporte;
-
+    /**
+     * Lista que armazenará os tratadores de cliente TCP.
+     */
+    private final List<TratadorClienteTcp> tratadoresClienteTcp = Collections.synchronizedList(new ArrayList<>());
+    /**
+     * Lista que armazenará os tratadores de cliente UDP.
+     */
+    private final List<TratadorClienteUdp> tratadoresClienteUdp = Collections.synchronizedList(new ArrayList<>());
     /**
      * Indica se o programa está em execução.
      */
     private boolean programaEmExecucao = true;
-
     /**
      * Socket TCP responsável por comunicar com os clientes.
      */
     private ServerSocket serverSocket = null;
-
     /**
      * Socket UDP responsável por comunicar com os clientes.
      */
     private DatagramSocket datagramSocket = null;
 
     /**
-     * Lista que armazenará os tratadores de cliente TCP.
-     */
-    private final List<TratadorClienteTcp> tratadoresClienteTcp = Collections.synchronizedList(new ArrayList<>());
-
-    /**
-     * Lista que armazenará os tratadores de cliente UDP.
-     */
-    private final List<TratadorClienteUdp> tratadoresClienteUdp = Collections.synchronizedList(new ArrayList<>());
-
-    /**
      * Constrói uma instância da classe ThreadComunicacaoClientes.
-     * @param portaServidor Porta utilizada para se comunicar com os clientes.
+     *
+     * @param portaServidor       Porta utilizada para se comunicar com os clientes.
      * @param protocoloTransporte Protocolo de transporte utilizado para se comunicar com os clientes.
      */
     public ThreadComunicacaoClientes(int portaServidor, ProtocoloTransporte protocoloTransporte) {
@@ -64,12 +60,14 @@ public class ThreadComunicacaoClientes extends Thread{
      * Comunica com os clientes usando TCP.
      */
     private void comunicacaoClienteTcp() {
-        try{
+        try {
             serverSocket = new ServerSocket(portaServidor);
             while (programaEmExecucao) {
-                TratadorClienteTcp tratadorClienteTcp = new TratadorClienteTcp(serverSocket.accept());
-                tratadoresClienteTcp.add(tratadorClienteTcp);
-                tratadorClienteTcp.start();
+                if (serverSocket != null && !serverSocket.isClosed()) {
+                    TratadorClienteTcp tratadorClienteTcp = new TratadorClienteTcp(serverSocket.accept());
+                    tratadoresClienteTcp.add(tratadorClienteTcp);
+                    tratadorClienteTcp.start();
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,21 +84,23 @@ public class ThreadComunicacaoClientes extends Thread{
      * Comunica com os clientes usando UDP.
      */
     private void comunicacaoClienteUdp() {
-        try{
+        try {
             datagramSocket = new DatagramSocket(portaServidor);
             while (programaEmExecucao) {
-                byte[] bufferRecebimento = new byte[1024];
-                DatagramPacket pacoteRecebido = new DatagramPacket(bufferRecebimento, bufferRecebimento.length);
-                datagramSocket.receive(pacoteRecebido);
-                TratadorClienteUdp tratadorClienteUdp = new TratadorClienteUdp(datagramSocket, pacoteRecebido);
-                tratadoresClienteUdp.add(tratadorClienteUdp);
-                tratadorClienteUdp.start();
+                if (datagramSocket != null && !datagramSocket.isClosed()) {
+                    byte[] bufferRecebimento = new byte[1024];
+                    DatagramPacket pacoteRecebido = new DatagramPacket(bufferRecebimento, bufferRecebimento.length);
+                    datagramSocket.receive(pacoteRecebido);
+                    TratadorClienteUdp tratadorClienteUdp = new TratadorClienteUdp(datagramSocket, pacoteRecebido);
+                    tratadoresClienteUdp.add(tratadorClienteUdp);
+                    tratadorClienteUdp.start();
+
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (datagramSocket != null)
-                datagramSocket.close();
+            if (datagramSocket != null) datagramSocket.close();
         }
     }
 
@@ -109,10 +109,8 @@ public class ThreadComunicacaoClientes extends Thread{
      */
     @Override
     public void run() {
-        if (protocoloTransporte == ProtocoloTransporte.TCP)
-            comunicacaoClienteTcp();
-        else if (protocoloTransporte == ProtocoloTransporte.UDP)
-            comunicacaoClienteUdp();
+        if (protocoloTransporte == ProtocoloTransporte.TCP) comunicacaoClienteTcp();
+        else if (protocoloTransporte == ProtocoloTransporte.UDP) comunicacaoClienteUdp();
     }
 
     /**
@@ -120,10 +118,10 @@ public class ThreadComunicacaoClientes extends Thread{
      */
     public void finalizar() {
         programaEmExecucao = false;
-        for (TratadorClienteTcp tratadorClienteTcp: tratadoresClienteTcp) {
+        for (TratadorClienteTcp tratadorClienteTcp : tratadoresClienteTcp) {
             tratadorClienteTcp.finalizar();
         }
-        for (TratadorClienteUdp tratadorClienteUdp: tratadoresClienteUdp) {
+        for (TratadorClienteUdp tratadorClienteUdp : tratadoresClienteUdp) {
             tratadorClienteUdp.finalizar();
         }
         if (serverSocket != null) try {
@@ -131,7 +129,6 @@ public class ThreadComunicacaoClientes extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (datagramSocket != null)
-            datagramSocket.close();
+        if (datagramSocket != null) datagramSocket.close();
     }
 }
