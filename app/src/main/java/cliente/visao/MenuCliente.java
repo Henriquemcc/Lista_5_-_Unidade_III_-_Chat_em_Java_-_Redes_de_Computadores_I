@@ -1,6 +1,7 @@
 package cliente.visao;
 
 import cliente.controlador.Cliente;
+import cliente.controlador.ControladorMensagens;
 import comum.modelo.IntRange;
 import comum.modelo.Mensagem;
 import comum.modelo.ProtocoloTransporte;
@@ -59,7 +60,9 @@ public class MenuCliente {
         else
             protocolo = ProtocoloTransporte.UDP;
 
-        Cliente.protocoloTransporte = protocolo;
+        boolean confirmacao = Utilitarios.obterConfirmacao("Deseja alterar o protocolo de transporte para " + protocolo + "?");
+        if (confirmacao)
+            Cliente.protocoloTransporte = protocolo;
     }
 
     /**
@@ -175,6 +178,13 @@ public class MenuCliente {
         }));
         opcoes.add(new Botao("Alterar protocolo da camada de transporte", () -> {
             menuProtocoloTransporte();
+            return null;
+        }));
+        opcoes.add(new Botao("Aplicar alterações", () -> {
+            if (Cliente.controladorMensagens != null) {
+                Cliente.controladorMensagens.finalizar();
+                Cliente.controladorMensagens = new ControladorMensagens(Cliente.enderecoServidor, Cliente.portaServidor, Cliente.protocoloTransporte, Cliente.nomeUsuario);
+            }
             return null;
         }));
         Menu menuPrincipal = new Menu("Menu principal do cliente", opcoes);
