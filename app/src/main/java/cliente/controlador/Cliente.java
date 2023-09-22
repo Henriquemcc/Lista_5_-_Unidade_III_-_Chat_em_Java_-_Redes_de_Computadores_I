@@ -52,17 +52,6 @@ public class Cliente {
     public static ControladorMensagens controladorMensagens = null;
 
     /**
-     * Realiza a configuração inicial do cliente.
-     */
-    public static void configuracaoInicial() {
-        Utilitarios.imprimirCabecalho("Menu de configuração inicial");
-        while (enderecoServidor == null) MenuCliente.menuEnderecoServidor();
-        while (portaServidor == null) MenuCliente.menuPortaServidor();
-        while (protocoloTransporte == null) MenuCliente.menuProtocoloTransporte();
-        while (nomeUsuario == null) MenuCliente.menuNomeUsuario();
-    }
-
-    /**
      * Realiza o processo de finalização do cliente.
      */
     private static void finalizar() {
@@ -81,7 +70,7 @@ public class Cliente {
      */
     public static void main(String[] args) {
         configurarInterrupcao();
-        configuracaoInicial();
+        MenuCliente.configuracaoInicial();
         controladorMensagens = new ControladorMensagens(enderecoServidor, portaServidor, protocoloTransporte, nomeUsuario);
         MenuCliente.menuPrincipal();
         System.out.println("Finalizando o programa");

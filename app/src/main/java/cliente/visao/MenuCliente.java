@@ -129,6 +129,17 @@ public class MenuCliente {
     }
 
     /**
+     * Realiza a configuração inicial do cliente.
+     */
+    public static void configuracaoInicial() {
+        Utilitarios.imprimirCabecalho("Menu de configuração inicial");
+        while (Cliente.enderecoServidor == null) MenuCliente.menuEnderecoServidor();
+        while (Cliente.portaServidor == null) MenuCliente.menuPortaServidor();
+        while (Cliente.protocoloTransporte == null) MenuCliente.menuProtocoloTransporte();
+        while (Cliente.nomeUsuario == null) MenuCliente.menuNomeUsuario();
+    }
+
+    /**
      * Mostra o menu principal.
      */
     public static void menuPrincipal() {
