@@ -10,7 +10,7 @@ Para esta implementação foi concebido a seguinte ideia: dois ou mais clientes 
 
 A comunicação entre os clientes e o servidor se dá através de trocas de comandos do cliente para o servidor. Quando o servidor recebe um comando, ele retorna uma resposta. Os passos principais para a troca de mensagens entre os clientes são:
 
-- O cliente (remetente) remetente envia um comando para o servidor solicitando a entrega de uma mensagem para o outro cliente (destinatário), e nessa solicitação é enviada a mensagem. O servidor responde com uma resposta de sucesso.
+- O cliente remetente envia um comando para o servidor solicitando a entrega de uma mensagem para o outro cliente (destinatário), e nessa solicitação é enviada a mensagem. O servidor responde com uma resposta de sucesso.
 
 - O servidor recebe a armazena as mensagens enviadas de um cliente (remetente) para outro, até que o cliente destinatário solicite o recebimento das suas mensagens.
 

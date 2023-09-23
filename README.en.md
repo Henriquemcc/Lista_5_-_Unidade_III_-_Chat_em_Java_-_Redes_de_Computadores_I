@@ -10,7 +10,7 @@ The following idea was conceived for this implementation: two or more clients ex
 
 The communication between the clients and the server happens with the exchange of commands from the client to the server. When the server receives a command, it  returns a response. The main steps to the exchange of messages between clients are:
 
-- The client (sender) sends a command to the server requesting the delivery of a message to the other client (recipient), and on this request it is sent the message. The server responds with a success response.
+- The sender client sends a command to the server requesting the delivery of a message to the other client (recipient), and on this request it is sent the message. The server responds with a success response.
 
 - The server receives and stores the messages sent from one client (sender) to the other, until the recipient client request the receipt of its messages.
 
