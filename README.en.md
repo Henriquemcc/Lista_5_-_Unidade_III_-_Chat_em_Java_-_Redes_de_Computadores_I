@@ -81,3 +81,11 @@ java -jar <.jar-file-name>
 ```
 
 In which <.jar-file-name> should be replaced with the name of the .jar file which you want to run: cliente.jar or servidor.jar.
+
+## Group members
+
+[Arthur Henrique Neves Dias](https://github.com/Arthu133)
+
+[Henrique Mendonça Castelar Campos](https://github.com/Henriquemcc)
+
+[João Paolinelli e Silva](https://github.com/JoaoPaolinelli)
