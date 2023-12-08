@@ -81,3 +81,11 @@ java -jar <nome-do-.jar>
 ```
 
 Em que <nome-do-.jar> deve ser substituído pelo nome do arquivo .jar que deseja executar: cliente.jar ou servidor.jar.
+
+## Membros do grupo
+
+[Arthur Henrique Neves Dias](https://github.com/Arthu133)
+
+[Henrique Mendonça Castelar Campos](https://github.com/Henriquemcc)
+
+[João Paolinelli e Silva](https://github.com/JoaoPaolinelli)
